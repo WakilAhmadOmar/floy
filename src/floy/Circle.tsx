@@ -9,58 +9,31 @@ import {
 } from "remotion";
 import { generateCirclePathSVGRelative } from "../utils/generateCirclePathSVGRelative";
 import { svgPathProperties } from "svg-path-properties";
+import styled from "styled-components";
+
+const CircleAVG = styled.svg<{ width: number; height: number; rotate: number }>`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  display: flex;
+  justifycontent: center;
+  alignitems: center;
+  transform: ${(props) => props.rotate}deg;
+`;
 
 const CircleComponent = () => {
-  // const [showCircle, setShowCircle] = useState(false);
-  // const [firstTime, setFirstTime] = useState(0);
   const frame = useCurrentFrame();
-  const {  fps ,  width , height} = useVideoConfig();
-
-  // const mainCircleRadius = 100;
-  // const innerRadius = mainCircleRadius - 20;
-  // const rotation = interpolate(
-  //   frame,
-  //   [0, fps * 2], // Two seconds for one full rotation
-  //   [0, 360],
-  // );
-  // const angleInRadians = (rotation * Math.PI) / 180;
-  // const progress = spring({
-  //   frame: frame,
-  //   fps,
-  //   config: {
-  //     damping: 200,
-  //   },
-  // });
-  // const pointX = innerRadius * Math.cos(angleInRadians) - 80;
-
-  // const translateY = interpolate(progress, [0, 1], [0, -300]);
-
-  // const translateX = interpolate(progress, [0, 1], [0, -100]);
-
-  // // Circle's center coordinates
-  // const centerX = 50;
-  // const centerY = 50;
-  // const radius = 200; // Radius of the orbiting path
-
-  // // Calculate the position of the orbiting point
-  // const angle = (-frame * Math.PI) / fps; // Change speed by adjusting the multiplier
-  // const x = centerX + radius * Math.cos(angle);
-  // const y = centerY + radius * Math.sin(angle);
-
-  // if (pointX === 0 && showCircle === false ) {
-  //   setShowCircle(true)
-  // }
+  const { fps, width, height } = useVideoConfig();
 
   const radius = 350;
   const numPoints = 360;
   const speedOfCircle = 2;
-  const circleR = 30
-  const svgWidth = radius  * 2 + circleR * 2
-  const svgHeight =  radius  * 2 + circleR * 2
+  const circleR = 30;
+  const svgWidth = radius * 2 + circleR * 2;
+  const svgHeight = radius * 2 + circleR * 2;
   const svgPathRelative: string = generateCirclePathSVGRelative(
     radius,
     numPoints,
-    circleR
+    circleR,
   );
   // Create an instance of path properties
   const properties = new svgPathProperties(svgPathRelative); // Correct usage
@@ -78,31 +51,24 @@ const CircleComponent = () => {
   const { x, y } = properties.getPointAtLength(progress);
 
   return (
-   
-      <Sequence from={106} durationInFrames={78} style={{
-        position:"absolute",
-        left:width/2 - svgWidth/2, 
-        top:height / 2 - svgHeight / 2
-      }}>
-        
-        <svg
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          style={{
-            // backgroundColor: "green",
-            width: svgWidth,
-            height: svgHeight,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            transform:"rotate(40deg)"
-          }}
-        >
-          
-          <circle r={circleR} cx={x} cy={y} fill="#FFF" />
-        </svg>
-      </Sequence>
-      
-    
+    <Sequence
+      from={106}
+      durationInFrames={78}
+      style={{
+        position: "absolute",
+        left: width / 2 - svgWidth / 2,
+        top: height / 2 - svgHeight / 2,
+      }}
+    >
+      <CircleAVG
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        width={svgWidth}
+        height={svgHeight}
+        rotate={40}
+      >
+        <circle r={circleR} cx={x} cy={y} fill="#FFF" />
+      </CircleAVG>
+    </Sequence>
   );
 };
 

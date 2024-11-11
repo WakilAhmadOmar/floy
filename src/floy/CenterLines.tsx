@@ -31,12 +31,19 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
   left
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps , durationInFrames } = useVideoConfig();
+  const frames = frame * 10
 
+const svgYPoint = interpolate(frame, [0, durationInFrames], [frame, 1500]);
+
+const startXOne = width / 3.5
+const startYOne = height / 1.5 + svgYPoint
+const startXTwo = width / 1.7
+const startYtwo = height / 1.2 + svgYPoint
   // const LeftPath = `M ${width - strokeWidth - 13 } ${height} q 10,-100 -450,-300 t 10,-500 t -700,-600`
-  const LeftPath = `M ${width / 1.5} ${height / 1.5} q -10,-100 -500,-400 t -310,-610 t -800,-200`
+  const RightPath = `M ${startXOne} ${startYOne} Q ${startXOne + 150},${startYOne -100} ${startXOne + 400},${startYOne - 300} T ${startXOne + 650},${startYOne -700} T ${startXOne + 900},${startYOne -2300} `
 
-  const RightPath = `M ${width / 3.5} ${height / 1.2} q 10,-100 500,-400 t 310,-610 t 800,-200`
+  const LeftPath = `M ${startXTwo} ${startYtwo} Q ${startXTwo - 410},${startYtwo -300} ${startXTwo - 600},${startYtwo -700} T ${startXTwo - 600},${startYtwo - 1500} T ${startXTwo - 800},${startYtwo - 2500}`
   
 
   const glowOpacity = interpolate(
@@ -51,51 +58,17 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
     extrapolateRight: "clamp",
   });
   // Linear progress for circle position
-  const tD = interpolate(frame - 112, [0, fps * 3], [1, 0], {
+  const tD = interpolate(frame  - 30, [0, fps * 3], [1, 0], {
     extrapolateRight: "clamp",
   });
-   // Create an instance of path properties
-  //  const propertiesRight = new svgPathProperties( RightPath ); // Correct usage
-
-
-   // Calculate the total length of the path
-  //  const pathLengthRight = propertiesRight.getTotalLength();
- 
-   // Map frame to position along the path
-  //  const progressRight = interpolate(
-  //    (frame - circleStartPoint) * speedOfCircle,
-  //    [0, 150],
-  //    [0, pathLengthRight],
-  //    { extrapolateRight: "clamp" },
-  //  );
-  // const { x, y } = propertiesRight.getPointAtLength(progressRight);
-
-
-  //  const progress1 = interpolate(
-  //    (frame - circleStartPoint * 2.2) * speedOfCircle * 2.2,
-  //    [0, 150],
-  //    [0, pathLength],
-  //    { extrapolateRight: "clamp" },
-  //  );
-  // const { x:x1, y:y1 } = properties.getPointAtLength(progress1);
-  
-  
-  // const progress2 = interpolate(
-  //   (frame - circleStartPoint * 1.5) * speedOfCircle * 1.5,
-  //   [0, 150],
-  //   [0, pathLength],
-  //   { extrapolateRight: "clamp" },
-  // );
-  // const { x:x2, y:y2 } = properties.getPointAtLength(progress2);
-
 
   return (
     <>
         <svg
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox={`0 0 ${width} ${height + frames}`}
           style={{
             width: width,
-            height: height,
+            height: height + frames,
             transform: `rotate(${rotate}deg)`,
             // backgroundColor:"green",
             position:"absolute",
@@ -115,7 +88,7 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
                 x="0"
                 y={height * (1 - t)}
                 width={width}
-                height={height * t}
+                height={ frame < 5 ? height * t : height * tD}
               />
             </clipPath>
            
@@ -171,7 +144,7 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
                 x="0"
                 y={height * (1 - t)}
                 width={width}
-                height={height * t}
+                height={frame < 5 ? height * t : height * tD}
               />
             </clipPath>
            

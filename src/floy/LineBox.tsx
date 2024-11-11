@@ -23,17 +23,34 @@ const LineBox: React.FC<IPropsLineBox> = ({
   speed = 1,
   rotate = 0,
   circleR= 4,
-  circleStartPoint = 0,
+  circleStartPoint = 1,
   speedOfCircle = 1
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps , durationInFrames } = useVideoConfig();
+const frames = frame * 10
 
-  const LeftPath = `M ${width - strokeWidth - 13 } ${height} q 10,-100 -450,-300 t 10,-500 t -700,-600`
-  const LeftPath1 = `M ${width / 2 -50} ${height - 100} q 10,-100 -450,-300 t 100,-450 t 50,-600 `
+const svgYPoint = interpolate(frame, [0, durationInFrames], [frame, 1500]);
 
-  const RightPath = `M ${strokeWidth + 13} ${height} q 10,-100 450,-300 t 10,-500 t 700,-600`
-  const RightPath1 = `M ${width / 2 -50} ${height - 100} q 10,-100 450,-300 t -100,-450 t -50,-600 `
+const startXRight = strokeWidth + 13;
+const startXLeft = width - strokeWidth - 13;
+
+const startXLeft1 = width / 2 - 100;
+const startYLeft1 = height - 100 + svgYPoint;
+
+const startXRight1 = width / 2 + 100;
+const startYRight1 = height - 100 + svgYPoint;
+
+const startYRight = height + svgYPoint
+
+  // const LeftPath = `M ${width - strokeWidth - 13 } ${height} q 10,-100 -450,-300 t 10,-500 t -700,-600`
+  const LeftPath = `M ${startXLeft } ${startYRight} Q ${startXLeft - 10},${startYRight - 500} ${startXLeft - 400},${startYRight -1000} T ${startXLeft - 540},${ startYRight - 2000} T ${startXLeft - 1560},${startYRight-2500}`
+  
+  const LeftPath1 = `M ${startXLeft1} ${startYLeft1} Q ${startXLeft1 - 100},${startYLeft1 -100} ${startXLeft1 - 500},${startYLeft1 -300} T ${startXLeft1 - 150 },${startYLeft1 -1350} T ${startXLeft1 - 350},${startYLeft1 -2500} `
+
+  // const RightPath = `M ${strokeWidth + 13 } ${height} q 10,-100 450,-300 t 10,-500 t 700,-600`
+  const RightPath = `M ${startXRight } ${startYRight} Q ${startXRight + 10},${startYRight -500} ${startXRight + 400},${startYRight -1000} T ${startXRight + 540},${ startYRight - 2000} T ${startXRight + 1560},${startYRight-2500}`
+  const RightPath1 = `M ${startXRight1} ${startYRight1} Q ${startXRight1 + 100},${startYRight1 -100} ${startXRight1 + 500},${startYRight1 -300} T ${startXRight1 + 150 },${startYRight1 -1350} T ${startXRight1 + 350},${startYRight1 -2500} `
 
   const glowOpacity = interpolate(
     frame % fps,
@@ -43,24 +60,24 @@ const LineBox: React.FC<IPropsLineBox> = ({
   );
 
   // Linear progress for circle position
-  const t = interpolate(frame * 4, [0, fps * 3], [0, 1], {
+  const t = interpolate(frame , [0, fps * 3], [0, 1], {
     extrapolateRight: "clamp",
   });
   // Linear progress for circle position
-  const tD = interpolate(frame - 112, [0, fps * 3], [1, 0], {
+  const tD = interpolate(frame - 30, [0, fps * 3], [5, 0], {
     extrapolateRight: "clamp",
   });
    // Create an instance of path properties
    const properties = new svgPathProperties(direction === "Right" ? RightPath : LeftPath); // Correct usage
-   const properties1 = new svgPathProperties(direction === "Right" ? RightPath1 : LeftPath1); // Correct usage
+  
 
    // Calculate the total length of the path
    const pathLength = properties.getTotalLength();
-   const pathLength1 = properties1.getTotalLength();
+
  
    // Map frame to position along the path
    const progress = interpolate(
-     (frame - circleStartPoint) * speedOfCircle,
+     (frame - circleStartPoint) * speedOfCircle * 1.5,
      [0, 150],
      [0, pathLength],
      { extrapolateRight: "clamp" },
@@ -69,7 +86,7 @@ const LineBox: React.FC<IPropsLineBox> = ({
 
 
    const progress1 = interpolate(
-     (frame - circleStartPoint * 2.2) * speedOfCircle * 2.2,
+     (frame - circleStartPoint * 2) * speedOfCircle * 2 ,
      [0, 150],
      [0, pathLength],
      { extrapolateRight: "clamp" },
@@ -78,7 +95,7 @@ const LineBox: React.FC<IPropsLineBox> = ({
   
   
   const progress2 = interpolate(
-    (frame - circleStartPoint * 1.5) * speedOfCircle * 1.5,
+    (frame - circleStartPoint * 1) * speedOfCircle * 1.3,
     [0, 150],
     [0, pathLength],
     { extrapolateRight: "clamp" },
@@ -86,33 +103,18 @@ const LineBox: React.FC<IPropsLineBox> = ({
   const { x:x2, y:y2 } = properties.getPointAtLength(progress2);
 
 
-  const progressTwo2 = interpolate(
-    (frame - circleStartPoint * 2.2) * speedOfCircle * 2.2,
-    [0, 150],
-    [0, pathLength1],
-    { extrapolateRight: "clamp" },
-  );
- const { x:x12, y:y12 } = properties1.getPointAtLength(progressTwo2);
-
-   const progressTwo1 = interpolate(
-     (frame - circleStartPoint * 1.5) * speedOfCircle * 1.5,
-     [0, 150],
-     [0, pathLength1],
-     { extrapolateRight: "clamp" },
-   );
-  const { x:x21, y:y21 } = properties1.getPointAtLength(progressTwo1);
-
-
   return (
-    <>
+    <div style={{
+      // transform:`translateY(${frame * 10}px)`
+    }}>
       {direction === "Left" && (
         <svg
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox={`0 0 ${width} ${height + frames}`}
           style={{
             width: width,
-            height: height,
+            height: height + frames,
             transform: `rotate(${rotate}deg)`,
-            
+            // backgroundColor:"red"
           }}
         >
           <defs>
@@ -124,7 +126,7 @@ const LineBox: React.FC<IPropsLineBox> = ({
                 x="0"
                 y={height * (1 -  t )}
                 width={width}
-                height={height * (frame < 130 ? t : tD)}
+                height={frame < 20 ? height *  t : height * tD }
               />
             </clipPath>
           </defs>
@@ -154,8 +156,6 @@ const LineBox: React.FC<IPropsLineBox> = ({
           <circle r={circleR} cx={x} cy={y} fill="#FFF" />
           <circle r={circleR} cx={x1} cy={y1} fill="#FFF" />
           <circle r={circleR} cx={x2} cy={y2} fill="#FFF" />
-          <circle r={circleR} cx={x12} cy={y12} fill="#FFF" />
-          <circle r={circleR} cx={x21} cy={y21} fill="#FFF" />
           <path
             id="progress-clipsdkfdksffggf"
             d={LeftPath}
@@ -186,11 +186,12 @@ const LineBox: React.FC<IPropsLineBox> = ({
       )}
       {direction === "Right" && (
         <svg
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox={`0 0 ${width} ${height + frames}`}
           style={{
             width: width,
-            height: height,
+            height: height + frames,
             transform: `rotate(${rotate}deg)`,
+            // backgroundColor:"red"
             
           }}
         >
@@ -203,7 +204,7 @@ const LineBox: React.FC<IPropsLineBox> = ({
                 x="0"
                 y={height * (1 - t)}
                 width={width}
-                height={height * t}
+                height={frame < 20 ? height * t : height * tD }
               />
             </clipPath>
            
@@ -234,8 +235,6 @@ const LineBox: React.FC<IPropsLineBox> = ({
           <circle r={circleR} cx={x} cy={y} fill="#FFF" />
           <circle r={circleR} cx={x1} cy={y1} fill="#FFF" />
           <circle r={circleR} cx={x2} cy={y2} fill="#FFF" />
-          <circle r={circleR} cx={x12} cy={y12} fill="#FFF" />
-          <circle r={circleR} cx={x21} cy={y21} fill="#FFF" />
           <path
             id="progress-clipsdkfdksffggf"
             d={RightPath}
@@ -266,7 +265,7 @@ const LineBox: React.FC<IPropsLineBox> = ({
           />
         </svg>
       )}
-    </>
+    </div>
   );
 };
 

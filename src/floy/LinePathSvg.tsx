@@ -121,7 +121,7 @@ export const BoltLineCircle: React.FC<IPropsLine> = ({
 
       <Path
         $glowOpacity={glowOpacity}
-        //   d="M200 600 q -100 -50 0 -100 q 100 -50 0 -100  q -100 -50 0 -100 q 100 -50 0 -100 "
+          // d="M200 600 q -100 -50 0 -100 q 100 -50 0 -100  q -100 -50 0 -100 q 100 -50 0 -100 "
         d={pathData}
         clipPath="url(#progress-clip)"
         id="linePath"

@@ -20,7 +20,9 @@ interface IProps {
   speedOfCircle?: number;
   circleR?: number;
   circleStartPoint?: number;
-  speedOfPath?:number
+  speedOfPath?: number;
+  clipPathId: string;
+  strokeId: string;
 }
 
 const ReuseCircle: React.FC<IProps> = ({
@@ -29,7 +31,9 @@ const ReuseCircle: React.FC<IProps> = ({
   speedOfCircle = 2,
   circleR = 30,
   circleStartPoint = 0,
-  speedOfPath= 1
+  speedOfPath = 1,
+  clipPathId,
+  strokeId
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -45,6 +49,7 @@ const ReuseCircle: React.FC<IProps> = ({
     numPoints,
     circleR,
     false,
+    
   );
   // Create an instance of path properties
   const properties = new svgPathProperties(svgPathRelative); // Correct usage
@@ -60,13 +65,13 @@ const ReuseCircle: React.FC<IProps> = ({
     { extrapolateRight: "clamp" },
   );
   const progressCircleTow = interpolate(
-    (frame  - circleStartPoint + 45) * speedOfCircle,
+    (frame - circleStartPoint + 45) * speedOfCircle,
     [0, 150],
     [0, pathLength],
     { extrapolateRight: "clamp" },
   );
   const { x, y } = properties.getPointAtLength(progress);
-  const { x:xTwo, y:yTwo } = properties.getPointAtLength(progressCircleTow);
+  const { x: xTwo, y: yTwo } = properties.getPointAtLength(progressCircleTow);
 
   // Linear progress for circle position
   const t = interpolate(frame * speedOfPath, [0, fps * 3], [0, 1], {
@@ -78,17 +83,21 @@ const ReuseCircle: React.FC<IProps> = ({
     [0.3, 1, 0.3],
     { extrapolateRight: "clamp" },
   );
+  const rotate = interpolate(frame , [0 , fps * 3] , [260 , 0])
   return (
-    <svg
-      viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-      style={{ height: svgHeight, }}
-    >
+    <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} style={{ height: svgHeight , transform:`rotate(${rotate}deg)`  }}>
       <defs>
-        <linearGradient id="gradient-circle1233" x1="0%" y1="100%" x2="0%" y2="0%">
+        <linearGradient
+          id={strokeId}
+          x1="0%"
+          y1="100%"
+          x2="0%"
+          y2="0%"
+        >
           <stop offset="0%" stopColor={"#FFF"} />
           <stop offset="100%" stopColor={"#FFF"} />
         </linearGradient>
-        <clipPath id="progress-clip-circle-2332" clipPathUnits="userSpaceOnUse">
+        <clipPath id={clipPathId} clipPathUnits="userSpaceOnUse">
           <rect
             x="0"
             y={svgHeight * (1 - t)}
@@ -112,8 +121,8 @@ const ReuseCircle: React.FC<IProps> = ({
         // $glowOpacity={glowOpacity}
         //   d="M200 600 q -100 -50 0 -100 q 100 -50 0 -100  q -100 -50 0 -100 q 100 -50 0 -100 "
         d={svgPathRelative}
-        clipPath="url(#progress-clip-circle-2332)"
-        stroke={"url(#gradient-circle1233)"}
+        clipPath={`url(#${clipPathId})`}
+        stroke={`url(#${strokeId})`}
         stroke-width={2}
         fill="none"
         // stroke="#FFF"

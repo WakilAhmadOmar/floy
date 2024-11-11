@@ -66,7 +66,6 @@ const MultiCirlce = () => {
               width: `${10 * widhtCircle}px`,
               height: `${10 * widhtCircle}px`,
               borderRadius: "50%",
-              //   transform: `scale(${scaleTwo })`,
               opacity: frame - 140,
               display: "flex",
               justifyContent: "center",
