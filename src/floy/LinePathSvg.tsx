@@ -53,8 +53,8 @@ export const BoltLineCircle: React.FC<IPropsLine> = ({
 
   // const LeftPath = `M ${width - strokeWidth - 13 } ${height} q 10,-100 -450,-300 t 10,-500 t -700,-600`
   const amplitude = frequency / 2;
-  const pathData = `M${svgWidth / 2} ${svgHeight - 27} q -${frequency} -${amplitude} 0 -${frequency} q ${frequency} -${amplitude} 0 -${frequency}  `;
-  // const pathData = `M${svgWidth / 2} ${svgHeight - 27} q 20,-50 -400,-300 t -250,-500 t 910,-300 t -200,-1050 `;
+  // const pathData = `M${svgWidth / 2} ${svgHeight - 27} q -${frequency} -${amplitude} 0 -${frequency} q ${frequency} -${amplitude} 0 -${frequency}  `;
+  const pathData = `M${svgWidth / 2} ${svgHeight - 27} q 20,-50 -400,-300 t -250,-500 t 910,-300 t -200,-1050 `;
   // const pathData = `M${svgWidth / 2} ${svgHeight - 27} t 10,-150  t -250,-300 t 150,-300 t -250,-350 m 90,100 a 100,100 0 1,0 -200,0 a 100,100 0 1,0 200,0`;
   //   const pathData = `M${svgWidth / 2} ${svgHeight} q -${frequency} -${amplitude} 0 -${frequency} q ${frequency} -${amplitude} 0 -${frequency}  q -${frequency} -${amplitude} 0 -${frequency} q ${frequency} -${amplitude} 0 -${frequency} `;
 

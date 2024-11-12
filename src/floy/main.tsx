@@ -52,7 +52,7 @@ const FloyMain = () => {
           alignItems:"center",
           paddingTop:600,
           gap:"25rem",
-          transform:`translateY(${frame * 15}px)`,
+          transform:`translateY(${ frame * 15}px)`,
         }}
         >
 
@@ -60,7 +60,7 @@ const FloyMain = () => {
         <Box left={-250} arrow="Right" />
         </Sequence>
         <CircleComponent />
-        <MainLines />
+        {/* <MainLines /> */}
       </AbsoluteFill>
     </AbsoluteFill>
     <MainText/>

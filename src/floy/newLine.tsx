@@ -30,9 +30,11 @@ const MianLine: React.FC<IPropsCenterLines> = ({
   //   left
 }) => {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
-  const frames = frame * 10;
 
+  const { fps, durationInFrames  , width:VideoWidth , height:VideoHeight} = useVideoConfig();
+   const frames = frame < 120 ? frame * 10 : 100 ;
+console.log("frame" , frame)
+console.log("framesssssssssss" , frames)
   const radius = 400;
   const numPoints = 40;
   const circleR = 60;
@@ -51,18 +53,28 @@ const MianLine: React.FC<IPropsCenterLines> = ({
 //    T 50,100
 //    T 100,50
 // "
-
-  const SX = width / 2;
-  const SY = height + svgYPoint;
+const SX = width / 2;
+const SY = height + svgYPoint;
+const RC = 480
+const CX = SX + 470 - RC
+const CY = SY - 1800 - RC 
   //   const LeftPath = `M ${width - strokeWidth - 13 } ${height} q 10,-100 -450,-300 t 10,-500 t -700,-600`
+
+  // x-coordinate: 𝑥=𝑐𝑥+𝑟⋅cos(𝜃)
+  // y-coordinate: y=𝑐y+𝑟⋅sin(𝜃)
   const Path = `M${SX} ${SY} 
   Q ${SX + 20},${SY - 100} ${SX - 80},${SY - 200} 
    T ${SX - 400},${SY - 700} 
    T ${SX - 100},${SY - 1320} 
-   T ${SX + 470},${SY - 1800}
-   T ${SX + 370}, ${SY - 2300}
-   
+   T ${SX + 370},${SY - 1985}         
+   A ${RC},${RC} 0 1,0 ${CX + RC * Math.cos(180)},${CY - RC * Math.sin(180)}  
+   A ${RC},${RC} 0 1,0 ${CX + RC * Math.cos(360)},${CY - RC * Math.sin(360)}
    `;
+  //  T ${SX + 370}, ${SY - 2300}
+  
+  //  const circularPath = `M ${CX + RC * Math.cos(0)},${CY - RC * Math.sin(0)}         
+  //     A ${RC},${RC} 0 1,0 ${CX + RC * Math.cos(180)},${CY - RC * Math.sin(180)}  
+  //     A ${RC},${RC} 0 1,0 ${CX + RC * Math.cos(360)},${CY - RC * Math.sin(360)}`
 
   //  M ${SX + 470},${SY - 1800}
   //  Q ${SX + 620},${SY -1750} ${SX + 620},${SY + 1900} 
@@ -84,18 +96,23 @@ const MianLine: React.FC<IPropsCenterLines> = ({
   const t = interpolate(frame - 30, [0, fps * 3], [0, 1], {
     extrapolateRight: "clamp",
   });
+  // const Ct = interpolate(frame - 100, [0, fps * 3], [0, 1], {
+  //   extrapolateRight: "clamp",
+  // });
+  // const CtD = interpolate(frame - 130, [0, fps * 3], [5, 1], {
+  //   extrapolateRight: "clamp",
+  // });
   // Linear progress for circle position
   const tD = interpolate(frame - 100, [0, fps * 3], [5, 0], {
     extrapolateRight: "clamp",
   });
-
   return (
     <>
       <svg
-        viewBox={`0 0 ${width} ${height + frames}`}
+        viewBox={`0 0 ${width} ${height }`}
         style={{
           width: width,
-          height: height + frames,
+          height: height  ,
           // transform: `rotate(${rotate}deg)`,
           // backgroundColor: "green",
           // left:left,
@@ -109,11 +126,25 @@ const MianLine: React.FC<IPropsCenterLines> = ({
           >
             <rect
               x="0"
-              y={height * (1 - t)}
+              // y={ height * (1 - t) }
+              y={100}
               width={width}
-              height={frame < 20 ? height * t : height * tD}
+              height={500}
+              // height={frame < 20 ? height * t : height * tD}
+              fill="red"
             />
           </clipPath>
+          {/* <clipPath
+            id="progress-circle"
+            clipPathUnits="userSpaceOnUse"
+          >
+            <rect
+              x={height * (1 - t)}
+              y="0"
+              width={frame < 80 ? width * Ct : width * CtD}
+              height={height}
+            />
+          </clipPath> */}
         </defs>
         {/* <mask id="maskThickPartTwoww">
             <rect
@@ -138,6 +169,15 @@ const MianLine: React.FC<IPropsCenterLines> = ({
               fill="white"
             />
           </mask> */}
+          <circle
+          r={frame * 4} cx={width -(frame * 4)} cy={ 600 - frame }
+    x={height * (1 - t)}
+    y={height * (1 - t)}
+    width={frame < 20 ? width * t : width * tD}
+    height={height}
+    fill="red"
+    opacity="0.4" // Adjust opacity to see through if needed
+  />
         <path
           id="progress-clipsdkfdksffggf"
           d={Path}
@@ -146,6 +186,15 @@ const MianLine: React.FC<IPropsCenterLines> = ({
           stroke-width={`${8}`}
           clipPath="url(#progress-clipsdkfdksffggfffddfdfdd)"
         />
+        {/* <path
+          id="progress-clipsdkfdksffdfweee"
+          d={circularPath }
+          stroke={"#FFF"}
+          fill="red"
+          stroke-width={`${8}`}
+          clipPath="url(#progress-circle)"
+          transform={`rotate(0, ${CX}, ${CY})`}
+        /> */}
         {/* <path
             id="progress-clipsdkfdksffggf"
             d={Path}
