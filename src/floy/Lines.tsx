@@ -13,10 +13,8 @@ const Lines = () => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
   return (
-    <AbsoluteFill style={{
-        position:"absolute"
-    }}>
-      <Sequence from={0} durationInFrames={144}  style={{
+    <>
+      {/* <Sequence from={0} durationInFrames={184}  style={{
           position: "absolute",
         //   backgroundColor:"red",
           display:"flex", 
@@ -24,8 +22,8 @@ const Lines = () => {
           top:0,
           
         }}>
-        <MianLine width={width } height={( 600 )+ (height /2 + 300)}/>
-        </Sequence>
+        <MianLine width={width } height={(  frame > 80 ? 800 : frame * 10 )+ (height /2 + 300)}/>
+        </Sequence> */}
       {/* <Sequence from={0}   style={{
           position: "absolute",
         //   backgroundColor:"red",
@@ -34,9 +32,9 @@ const Lines = () => {
           top:0,
           
         }}>
-        <ReuseCircle />
+        <ReuseCircle  clipPathId=""   strokeId=""/>
         </Sequence> */}
-      {/* <Sequence from={3} durationInFrames={180}
+      <Sequence from={3} durationInFrames={180}
         style={{
           position: "absolute",
         //   backgroundColor:"red",
@@ -76,10 +74,10 @@ const Lines = () => {
           circleStartPoint={22}
         />
 
-      </Sequence> */}
+      </Sequence>
       
       
-    </AbsoluteFill>
+    </>
   );
 };
 

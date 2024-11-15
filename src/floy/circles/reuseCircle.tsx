@@ -23,17 +23,19 @@ interface IProps {
   speedOfPath?: number;
   clipPathId: string;
   strokeId: string;
+  rotate?:number
 }
 
 const ReuseCircle: React.FC<IProps> = ({
   radius = 300,
   numPoints = 360,
   speedOfCircle = 2,
-  circleR = 30,
+  circleR = 20,
   circleStartPoint = 0,
   speedOfPath = 1,
   clipPathId,
-  strokeId
+  strokeId,
+  rotate= 0
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -83,9 +85,9 @@ const ReuseCircle: React.FC<IProps> = ({
     [0.3, 1, 0.3],
     { extrapolateRight: "clamp" },
   );
-  const rotate = interpolate(frame , [0 , fps * 3] , [260 , 0])
+  // const rotate = interpolate(frame , [0 , fps * 3] , [260 , 0])
   return (
-    <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} style={{ height: svgHeight , transform:`rotate(${rotate}deg)`  }}>
+    <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} style={{ height: svgHeight , transform:`rotate(${rotate}deg)`,  }}>
       <defs>
         <linearGradient
           id={strokeId}
@@ -123,7 +125,7 @@ const ReuseCircle: React.FC<IProps> = ({
         d={svgPathRelative}
         clipPath={`url(#${clipPathId})`}
         stroke={`url(#${strokeId})`}
-        stroke-width={2}
+        stroke-width={4}
         fill="none"
         // stroke="#FFF"
       />

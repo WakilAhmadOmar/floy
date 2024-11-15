@@ -11,7 +11,7 @@ const MultiCirlce = () => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const prsessOne = spring({
-    frame: frame - 160,
+    frame: frame - 180,
     fps,
     config: {
       damping: 200,
@@ -19,7 +19,7 @@ const MultiCirlce = () => {
   });
   const scaleOne = interpolate(prsessOne, [0, 1], [1, 6]);
   const prsessTwo = spring({
-    frame: frame - 140,
+    frame: frame - 160,
     fps,
     config: {
       damping: 200,
@@ -28,7 +28,7 @@ const MultiCirlce = () => {
 
   const widhtCircle = interpolate(prsessTwo, [0, 1], [1, 16]);
   const progrees = spring({
-    frame : frame - 170,
+    frame : frame - 190,
     fps,
     config: {
       damping: 200,
@@ -37,7 +37,7 @@ const MultiCirlce = () => {
   const scaleMain = interpolate(progrees, [0, 1], [1, 200]);
   return (
     
-      <Sequence from={135} durationInFrames={50}
+      <Sequence from={160} durationInFrames={50}
         style={{
           position:"absolute",
           display: "flex",

@@ -1,6 +1,6 @@
 import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { generateCirclePathSVGRelative } from "../utils/generateCirclePathSVGRelative";
-// import { svgPathProperties } from "svg-path-properties";
+
+import { svgPathProperties } from "svg-path-properties";
 
 interface IPropsCenterLines {
   //   strokeWidth: number;
@@ -31,21 +31,10 @@ const MianLine: React.FC<IPropsCenterLines> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  const { fps, durationInFrames  , width:VideoWidth , height:VideoHeight} = useVideoConfig();
-   const frames = frame < 120 ? frame * 10 : 100 ;
-console.log("frame" , frame)
-console.log("framesssssssssss" , frames)
-  const radius = 400;
-  const numPoints = 40;
-  const circleR = 60;
-  const svgPathRelative: string = generateCirclePathSVGRelative(
-    radius,
-    numPoints,
-    circleR,
-    false,
-  );
+  const { fps, durationInFrames} = useVideoConfig();
+   const frames = frame * 10  ;
 
-  const svgYPoint = interpolate(frame, [0, durationInFrames], [frame, 1500]);
+  const svgYPoint = interpolate(frame, [0, durationInFrames], [frame, 1300]);
 //   d="
 //   M 100,50          
 //   Q 150,50 150,100  
@@ -55,21 +44,29 @@ console.log("framesssssssssss" , frames)
 // "
 const SX = width / 2;
 const SY = height + svgYPoint;
-const RC = 480
+const RC = 450
 const CX = SX + 470 - RC
 const CY = SY - 1800 - RC 
   //   const LeftPath = `M ${width - strokeWidth - 13 } ${height} q 10,-100 -450,-300 t 10,-500 t -700,-600`
 
-  // x-coordinate: 𝑥=𝑐𝑥+𝑟⋅cos(𝜃)
-  // y-coordinate: y=𝑐y+𝑟⋅sin(𝜃)
   const Path = `M${SX} ${SY} 
-  Q ${SX + 20},${SY - 100} ${SX - 80},${SY - 200} 
-   T ${SX - 400},${SY - 700} 
-   T ${SX - 100},${SY - 1320} 
-   T ${SX + 370},${SY - 1985}         
-   A ${RC},${RC} 0 1,0 ${CX + RC * Math.cos(180)},${CY - RC * Math.sin(180)}  
-   A ${RC},${RC} 0 1,0 ${CX + RC * Math.cos(360)},${CY - RC * Math.sin(360)}
+  Q ${SX + 100},${SY - 200} ${SX + 200},${SY - 500} 
+   T ${SX - 400},${SY - 1100} 
+   T ${SX + 50},${SY - 1870} 
+   A ${RC},${RC} 0 1,0 ${CX + RC * Math.cos(135)},${CY - RC * Math.sin(135)}
    `;
+
+  //  M ${SX - 430},${SY - 2300}
+  // Q ${SX -300},${SY - 1770} ${SX +100},${SY - 1870} 
+  // T ${SX +10},${SY - 2260}
+
+
+  //  M ${SX - 435},${SY - 2300}
+  //  Q ${SX -400},${SY - 2000} ${SX - 200},${SY - 2000} 
+  //  T ${SX + 100},${SY - 1870}
+
+
+  //  A ${RC},${RC} 0 1,0 ${CX + RC * Math.cos(270)},${CY - RC * Math.sin(270)}
   //  T ${SX + 370}, ${SY - 2300}
   
   //  const circularPath = `M ${CX + RC * Math.cos(0)},${CY - RC * Math.sin(0)}         
@@ -84,6 +81,23 @@ const CY = SY - 1800 - RC
 
   //  "M ${SX + 470},${SY - 1800} Q 150,50 150,100"
   // T ${SX + 470},${SY - 1900} T ${SX - 470},${SY - 2100}
+    // Create an instance of path properties
+    const properties = new svgPathProperties(Path); // Correct usage
+  
+
+    // Calculate the total length of the path
+    const pathLength = properties.getTotalLength();
+ 
+  
+    // Map frame to position along the path
+    const progress = interpolate(
+      (frame ),
+      [0, 150],
+      [0, pathLength],
+      { extrapolateRight: "clamp" },
+    );
+   const { x, y } = properties.getPointAtLength(progress);
+ 
 
   const glowOpacity = interpolate(
     frame % fps,
@@ -93,28 +107,22 @@ const CY = SY - 1800 - RC
   );
 
   // Linear progress for circle position
-  const t = interpolate(frame - 30, [0, fps * 3], [0, 1], {
+  const t = interpolate(frame /2, [0, fps * 3], [0, 1], {
     extrapolateRight: "clamp",
   });
-  // const Ct = interpolate(frame - 100, [0, fps * 3], [0, 1], {
-  //   extrapolateRight: "clamp",
-  // });
-  // const CtD = interpolate(frame - 130, [0, fps * 3], [5, 1], {
-  //   extrapolateRight: "clamp",
-  // });
   // Linear progress for circle position
-  const tD = interpolate(frame - 100, [0, fps * 3], [5, 0], {
+  const tD = interpolate(frame - 70, [0, fps * 4], [5, 0], {
     extrapolateRight: "clamp",
   });
   return (
     <>
       <svg
-        viewBox={`0 0 ${width} ${height }`}
+        viewBox={`0 0 ${width} ${height + frames}`}
         style={{
           width: width,
-          height: height  ,
+          height: height + frames ,
           // transform: `rotate(${rotate}deg)`,
-          // backgroundColor: "green",
+          backgroundColor: "green",
           // left:left,
           // zIndex:10000
         }}
@@ -125,27 +133,30 @@ const CY = SY - 1800 - RC
             clipPathUnits="userSpaceOnUse"
           >
             <rect
-              x="0"
-              // y={ height * (1 - t) }
-              y={100}
-              width={width}
-              height={500}
-              // height={frame < 20 ? height * t : height * tD}
-              fill="red"
+             x={frame > 160 ? 160 - (frame - 160): frame * 5 }
+             y={ height * (1 - t) }
+             width={width  }
+             height={ frame > 70 ? height *  tD :  height * t }
+             fill="red"
             />
           </clipPath>
-          {/* <clipPath
-            id="progress-circle"
-            clipPathUnits="userSpaceOnUse"
-          >
-            <rect
-              x={height * (1 - t)}
-              y="0"
-              width={frame < 80 ? width * Ct : width * CtD}
-              height={height}
-            />
-          </clipPath> */}
         </defs>
+        <circle
+              cx={width / 2 }
+              cy={ height * (1 - t) }
+              r={frame * 7}
+              // width={width  }
+              // height={ frame > 70 ? height *  tD :  height * t }
+              fill="red"
+            />
+        <circle
+              cx={x }
+              cy={ height * (1 - t) }
+              r={20}
+              // width={width  }
+              // height={ frame > 70 ? height *  tD :  height * t }
+              fill="yellow"
+            />
         {/* <mask id="maskThickPartTwoww">
             <rect
               x="0"
@@ -169,15 +180,6 @@ const CY = SY - 1800 - RC
               fill="white"
             />
           </mask> */}
-          <circle
-          r={frame * 4} cx={width -(frame * 4)} cy={ 600 - frame }
-    x={height * (1 - t)}
-    y={height * (1 - t)}
-    width={frame < 20 ? width * t : width * tD}
-    height={height}
-    fill="red"
-    opacity="0.4" // Adjust opacity to see through if needed
-  />
         <path
           id="progress-clipsdkfdksffggf"
           d={Path}

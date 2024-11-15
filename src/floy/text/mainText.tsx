@@ -5,10 +5,10 @@ import LogoText from "./LogoText";
 const MainText = () => {
   return (
     <AbsoluteFill >
-      <Sequence from={184} style={{backgroundColor:"#FFF"}} durationInFrames={27}>
+      <Sequence from={204} style={{backgroundColor:"#FFF"}} durationInFrames={27}>
       <CircleAnimations />
       </Sequence>
-      <Sequence from={210} style={{backgroundColor:"#FFF"}} >
+      <Sequence from={230} style={{backgroundColor:"#FFF"}} >
         <LogoText />
       </Sequence>
     </AbsoluteFill>

@@ -15,7 +15,7 @@ const MainLines = () => {
 
   return (
     < >
-      <Sequence from={106} durationInFrames={78} style={{
+      {/* <Sequence from={106} durationInFrames={78} style={{
         position:"absolute",
         display:"flex",
         justifyContent:"center",
@@ -23,7 +23,7 @@ const MainLines = () => {
       }}>
 
       <ReuseCircle radius={ 420} speedOfPath={4} circleR={15} circleStartPoint={90} clipPathId="kdsfjklsfdsdf" strokeId="weirueeeiie"/>
-      </Sequence>
+      </Sequence> */}
       {/* <Sequence from={130} durationInFrames={78} style={{
         position:"absolute",
         display:"flex",
