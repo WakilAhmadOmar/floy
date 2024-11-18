@@ -9,9 +9,9 @@ interface IPropsLineBox {
   direction: "Left" | "Right";
   speed?: number;
   rotate?: number;
-  circleR?:number;
-  circleStartPoint?:number,
-  speedOfCircle?:number
+  circleR?: number;
+  circleStartPoint?: number;
+  speedOfCircle?: number;
 }
 
 const LineBox: React.FC<IPropsLineBox> = ({
@@ -22,35 +22,35 @@ const LineBox: React.FC<IPropsLineBox> = ({
   direction = "Left",
   speed = 1,
   rotate = 0,
-  circleR= 4,
+  circleR = 4,
   circleStartPoint = 1,
-  speedOfCircle = 1
+  speedOfCircle = 1,
 }) => {
   const frame = useCurrentFrame();
-  const { fps , durationInFrames } = useVideoConfig();
-const frames = frame * 10
+  const { fps, durationInFrames } = useVideoConfig();
+  const frames = frame * 10;
 
-const svgYPoint = interpolate(frame, [0, durationInFrames], [frame, 1500]);
+  const svgYPoint = interpolate(frame, [0, durationInFrames], [frame, 1500]);
 
-const startXRight = strokeWidth + 13;
-const startXLeft = width - strokeWidth - 13;
+  const startXRight = strokeWidth + 13;
+  const startXLeft = width - strokeWidth - 13;
 
-const startXLeft1 = width / 2 - 100;
-const startYLeft1 = height - 100 + svgYPoint;
+  const startXLeft1 = width / 2 - 100;
+  const startYLeft1 = height - 100 + svgYPoint;
 
-const startXRight1 = width / 2 + 100;
-const startYRight1 = height - 100 + svgYPoint;
+  const startXRight1 = width / 2 + 100;
+  const startYRight1 = height - 100 + svgYPoint;
 
-const startYRight = height + svgYPoint
+  const startYRight = height + svgYPoint;
 
   // const LeftPath = `M ${width - strokeWidth - 13 } ${height} q 10,-100 -450,-300 t 10,-500 t -700,-600`
-  const LeftPath = `M ${startXLeft } ${startYRight} Q ${startXLeft - 10},${startYRight - 500} ${startXLeft - 400},${startYRight -1000} T ${startXLeft - 540},${ startYRight - 2000} T ${startXLeft - 1560},${startYRight-2500}`
-  
-  const LeftPath1 = `M ${startXLeft1} ${startYLeft1} Q ${startXLeft1 - 100},${startYLeft1 -100} ${startXLeft1 - 500},${startYLeft1 -300} T ${startXLeft1 - 150 },${startYLeft1 -1350} T ${startXLeft1 - 350},${startYLeft1 -2500} `
+  const LeftPath = `M ${startXLeft} ${startYRight} Q ${startXLeft - 10},${startYRight - 500} ${startXLeft - 400},${startYRight - 1000} T ${startXLeft - 540},${startYRight - 2000} T ${startXLeft - 1560},${startYRight - 2500}`;
+
+  const LeftPath1 = `M ${startXLeft1} ${startYLeft1} Q ${startXLeft1 - 100},${startYLeft1 - 100} ${startXLeft1 - 500},${startYLeft1 - 300} T ${startXLeft1 - 150},${startYLeft1 - 1350} T ${startXLeft1 - 350},${startYLeft1 - 2500} `;
 
   // const RightPath = `M ${strokeWidth + 13 } ${height} q 10,-100 450,-300 t 10,-500 t 700,-600`
-  const RightPath = `M ${startXRight } ${startYRight} Q ${startXRight + 10},${startYRight -500} ${startXRight + 400},${startYRight -1000} T ${startXRight + 540},${ startYRight - 2000} T ${startXRight + 1560},${startYRight-2500}`
-  const RightPath1 = `M ${startXRight1} ${startYRight1} Q ${startXRight1 + 100},${startYRight1 -100} ${startXRight1 + 500},${startYRight1 -300} T ${startXRight1 + 150 },${startYRight1 -1350} T ${startXRight1 + 350},${startYRight1 -2500} `
+  const RightPath = `M ${startXRight} ${startYRight} Q ${startXRight + 10},${startYRight - 500} ${startXRight + 400},${startYRight - 1000} T ${startXRight + 540},${startYRight - 2000} T ${startXRight + 1560},${startYRight - 2500}`;
+  const RightPath1 = `M ${startXRight1} ${startYRight1} Q ${startXRight1 + 100},${startYRight1 - 100} ${startXRight1 + 500},${startYRight1 - 300} T ${startXRight1 + 150},${startYRight1 - 1350} T ${startXRight1 + 350},${startYRight1 - 2500} `;
 
   const glowOpacity = interpolate(
     frame % fps,
@@ -60,53 +60,54 @@ const startYRight = height + svgYPoint
   );
 
   // Linear progress for circle position
-  const t = interpolate(frame , [0, fps * 3], [0, 1], {
+  const t = interpolate(frame, [0, fps * 3], [0, 1], {
     extrapolateRight: "clamp",
   });
   // Linear progress for circle position
   const tD = interpolate(frame - 30, [0, fps * 3], [5, 0], {
     extrapolateRight: "clamp",
   });
-   // Create an instance of path properties
-   const properties = new svgPathProperties(direction === "Right" ? RightPath : LeftPath); // Correct usage
-  
+  // Create an instance of path properties
+  const properties = new svgPathProperties(
+    direction === "Right" ? RightPath : LeftPath,
+  ); // Correct usage
 
-   // Calculate the total length of the path
-   const pathLength = properties.getTotalLength();
+  // Calculate the total length of the path
+  const pathLength = properties.getTotalLength();
 
- 
-   // Map frame to position along the path
-   const progress = interpolate(
-     (frame - circleStartPoint) * speedOfCircle * 1.5,
-     [0, 150],
-     [0, pathLength],
-     { extrapolateRight: "clamp" },
-   );
+  // Map frame to position along the path
+  const progress = interpolate(
+    (frame - circleStartPoint) * speedOfCircle * 1.5,
+    [0, 150],
+    [0, pathLength],
+    { extrapolateRight: "clamp" },
+  );
   const { x, y } = properties.getPointAtLength(progress);
 
+  const progress1 = interpolate(
+    (frame - circleStartPoint * 2) * speedOfCircle * 2,
+    [0, 150],
+    [0, pathLength],
+    { extrapolateRight: "clamp" },
+  );
+  const { x: x1, y: y1 } = properties.getPointAtLength(progress1);
 
-   const progress1 = interpolate(
-     (frame - circleStartPoint * 2) * speedOfCircle * 2 ,
-     [0, 150],
-     [0, pathLength],
-     { extrapolateRight: "clamp" },
-   );
-  const { x:x1, y:y1 } = properties.getPointAtLength(progress1);
-  
-  
   const progress2 = interpolate(
     (frame - circleStartPoint * 1) * speedOfCircle * 1.3,
     [0, 150],
     [0, pathLength],
     { extrapolateRight: "clamp" },
   );
-  const { x:x2, y:y2 } = properties.getPointAtLength(progress2);
-
+  const { x: x2, y: y2 } = properties.getPointAtLength(progress2);
 
   return (
-    <div style={{
-      // transform:`translateY(${frame * 10}px)`
-    }}>
+    <div
+      style={
+        {
+          // transform:`translateY(${frame * 10}px)`
+        }
+      }
+    >
       {direction === "Left" && (
         <svg
           viewBox={`0 0 ${width} ${height + frames}`}
@@ -124,11 +125,39 @@ const startYRight = height + svgYPoint
             >
               <rect
                 x="0"
-                y={height * (1 -  t )}
+                y={height * (1 - t)}
                 width={width}
-                height={frame < 20 ? height *  t : height * tD }
+                height={frame < 20 ? height * t : height * tD}
               />
             </clipPath>
+            <filter
+              id="main-line-shadow-line-box"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+            >
+              <feDropShadow
+                dx="-3"
+                dy="2"
+                stdDeviation="6"
+                flood-color="rgba(0, 0, 0, 0.5)"
+              />
+            </filter>
+            <filter
+              id="main-line-shadow-circle-line-box"
+              x="-200%"
+              y="-50%"
+              width="300%"
+              height="300%"
+            >
+              <feDropShadow
+                dx="-5"
+                dy="5"
+                stdDeviation="1"
+                flood-color="rgba(0, 0, 0, 0.2)"
+              />
+            </filter>
           </defs>
           <mask id="maskThickPart">
             <rect
@@ -153,9 +182,27 @@ const startYRight = height + svgYPoint
               fill="white"
             />
           </mask>
-          <circle r={circleR} cx={x} cy={y} fill="#FFF" />
-          <circle r={circleR} cx={x1} cy={y1} fill="#FFF" />
-          <circle r={circleR} cx={x2} cy={y2} fill="#FFF" />
+          <circle
+            r={circleR}
+            cx={x}
+            cy={y}
+            fill="#FFF"
+            filter="url(#main-line-shadow-circle-line-box)"
+          />
+          <circle
+            r={circleR}
+            cx={x1}
+            cy={y1}
+            fill="#FFF"
+            filter="url(#main-line-shadow-circle-line-box)"
+          />
+          <circle
+            r={circleR}
+            cx={x2}
+            cy={y2}
+            fill="#FFF"
+            filter="url(#main-line-shadow-circle-line-box)"
+          />
           <path
             id="progress-clipsdkfdksffggf"
             d={LeftPath}
@@ -172,6 +219,7 @@ const startYRight = height + svgYPoint
             stroke-width={`${strokeWidth * 4}`}
             clipPath="url(#progress-clipsdkfdksffggf)"
             mask="url(#maskThickPart)"
+            filter="url(#main-line-shadow-line-box)"
           />
           <path
             id="progress-clipsdkfdksffggf"
@@ -180,6 +228,7 @@ const startYRight = height + svgYPoint
             fill="none"
             stroke-width={`${strokeWidth * 2}`}
             clipPath="url(#progress-clipsdkfdksffggf)"
+            filter="url(#main-line-shadow-line-box)"
             // mask="url(#maskThickPart)"
           />
         </svg>
@@ -192,7 +241,6 @@ const startYRight = height + svgYPoint
             height: height + frames,
             transform: `rotate(${rotate}deg)`,
             // backgroundColor:"red"
-            
           }}
         >
           <defs>
@@ -204,10 +252,37 @@ const startYRight = height + svgYPoint
                 x="0"
                 y={height * (1 - t)}
                 width={width}
-                height={frame < 20 ? height * t : height * tD }
+                height={frame < 20 ? height * t : height * tD}
               />
             </clipPath>
-           
+            <filter
+              id="main-line-shadow-line-box"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+            >
+              <feDropShadow
+                dx="-3"
+                dy="2"
+                stdDeviation="6"
+                flood-color="rgba(0, 0, 0, 0.5)"
+              />
+            </filter>
+            <filter
+              id="main-line-shadow-circle-line-box"
+              x="-200%"
+              y="-50%"
+              width="300%"
+              height="300%"
+            >
+              <feDropShadow
+                dx="-5"
+                dy="5"
+                stdDeviation="1"
+                flood-color="rgba(0, 0, 0, 0.2)"
+              />
+            </filter>
           </defs>
           <mask id="maskThickPartTwo">
             <rect
@@ -232,9 +307,27 @@ const startYRight = height + svgYPoint
               fill="white"
             />
           </mask>
-          <circle r={circleR} cx={x} cy={y} fill="#FFF" />
-          <circle r={circleR} cx={x1} cy={y1} fill="#FFF" />
-          <circle r={circleR} cx={x2} cy={y2} fill="#FFF" />
+          <circle
+            r={circleR}
+            cx={x}
+            cy={y}
+            fill="#FFF"
+            filter="url(#main-line-shadow-circle-line-box)"
+          />
+          <circle
+            r={circleR}
+            cx={x1}
+            cy={y1}
+            fill="#FFF"
+            filter="url(#main-line-shadow-circle-line-box)"
+          />
+          <circle
+            r={circleR}
+            cx={x2}
+            cy={y2}
+            fill="#FFF"
+            filter="url(#main-line-shadow-circle-line-box)"
+          />
           <path
             id="progress-clipsdkfdksffggf"
             d={RightPath}
@@ -252,6 +345,7 @@ const startYRight = height + svgYPoint
             stroke-width={`${strokeWidth * 4}`}
             clipPath="url(#progress-clipsdkfdksffggf)"
             mask="url(#maskThickPartTwo)"
+            filter="url(#main-line-shadow-line-box)"
           />
           {/* q 10,-100 -450,-300 t 100,-450 t 50,-600 */}
           <path
@@ -261,6 +355,7 @@ const startYRight = height + svgYPoint
             fill="none"
             stroke-width={`${strokeWidth * 2}`}
             clipPath="url(#progress-clipsdkfdksffggf)"
+            filter="url(#main-line-shadow-line-box)"
             // mask="url(#maskThickPart)"
           />
         </svg>

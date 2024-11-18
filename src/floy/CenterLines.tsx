@@ -95,6 +95,20 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
               height={frame < 5 ? height * t : height * tD}
             />
           </clipPath>
+          <filter
+            id="center-line-shadow"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
+            <feDropShadow
+              dx="-3"
+              dy="2"
+              stdDeviation="6"
+              flood-color="rgba(0, 0, 0, 0.5)"
+            />
+          </filter>
         </defs>
         <mask id="maskThickPartTwoww">
           <rect
@@ -126,6 +140,7 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
           fill="none"
           stroke-width={`${strokeWidth}`}
           clipPath="url(#progress-clipsdkfdksffggfffddf)"
+          filter="url(#center-line-shadow)"
         />
         <path
           id="progress-clipsdkfdksffggf"
@@ -135,6 +150,7 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
           stroke-width={`${strokeWidth * 4}`}
           clipPath="url(#progress-clipsdkfdksffggfffddf)"
           mask="url(#maskThickPartTwoww)"
+          filter="url(#center-line-shadow)"
         />
 
         <defs>
@@ -180,6 +196,7 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
           fill="none"
           stroke-width={`${strokeWidth}`}
           clipPath="url(#progress-clipsdkfdksffggfffddf34934d)"
+          filter="url(#center-line-shadow)"
         />
         <path
           id="progress-clipsdkfdksffggf"
@@ -189,6 +206,7 @@ const CenterLines: React.FC<IPropsCenterLines> = ({
           stroke-width={`${strokeWidth * 4}`}
           clipPath="url(#progress-clipsdkfdksffggfffddf34934d)"
           mask="url(#maskThickPartTwoww3444err)"
+          filter="url(#center-line-shadow)"
         />
       </svg>
     </>

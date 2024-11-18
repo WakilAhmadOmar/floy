@@ -21,8 +21,8 @@ interface IProps {
   circleR?: number;
   circleStartPoint?: number;
   speedOfPath?: number;
-  clipPathId: string;
-  strokeId: string;
+  clipPathId?: string;
+  strokeId?: string;
   rotate?:number
 }
 
@@ -44,8 +44,8 @@ const ReuseCircle: React.FC<IProps> = ({
   // const numPoints = 360;
   // const speedOfCircle = 2;
   // const circleR = 30
-  const svgWidth = radius * 2 + circleR * 2;
-  const svgHeight = radius * 2 + circleR * 2;
+  const svgWidth = radius * 2 + circleR * 2 ;
+  const svgHeight = radius * 2 + circleR * 2 ;
   const svgPathRelative: string = generateCirclePathSVGRelative(
     radius,
     numPoints,
@@ -87,7 +87,7 @@ const ReuseCircle: React.FC<IProps> = ({
   );
   // const rotate = interpolate(frame , [0 , fps * 3] , [260 , 0])
   return (
-    <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} style={{ height: svgHeight , transform:`rotate(${rotate}deg)`,  }}>
+    <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} style={{ height: svgHeight , transform:`rotate(${0}deg)`,  }}>
       <defs>
         <linearGradient
           id={strokeId}
@@ -107,26 +107,44 @@ const ReuseCircle: React.FC<IProps> = ({
             height={svgHeight * t}
           />
         </clipPath>
+        <filter
+            id="circle-shadow-circle"
+            x="-200%" y="-100%"
+            width="300%"
+            height="300%"
+          >
+            <feDropShadow
+             dx="-20"
+             dy="20"
+             stdDeviation="20"
+              flood-color="rgba(0, 0, 0, 0.5)"
+            />
+          </filter>
+          <filter
+            id="circle-line-shadow"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
+            <feDropShadow
+              dx="-3"
+              dy="2"
+              stdDeviation="6"
+              flood-color="rgba(0, 0, 0, 0.5)"
+            />
+          </filter>
       </defs>
-      <circle r={circleR} cx={x} cy={y} fill="#FFF" />
-      <circle r={circleR} cx={xTwo} cy={yTwo} fill="#FFF" />
-      {/* <Path
-        $glowOpacity={glowOpacity}
-        //   d="M200 600 q -100 -50 0 -100 q 100 -50 0 -100  q -100 -50 0 -100 q 100 -50 0 -100 "
-        d={svgPathRelative}
-        clipPath="url(#progress-clip)"
-        stroke={"url(#gradient)"}
-        width={2}
-        fill="none"
-      /> */}
+      <circle r={circleR} cx={x} cy={y} fill="#FFF" filter="url(#circle-shadow-circle)"/>
+      <circle r={circleR} cx={xTwo} cy={yTwo} fill="#FFF" filter="url(#circle-shadow-circle)"/>
+
       <path
-        // $glowOpacity={glowOpacity}
-        //   d="M200 600 q -100 -50 0 -100 q 100 -50 0 -100  q -100 -50 0 -100 q 100 -50 0 -100 "
         d={svgPathRelative}
         clipPath={`url(#${clipPathId})`}
         stroke={`url(#${strokeId})`}
         stroke-width={4}
         fill="none"
+        filter="url(#circle-line-shadow)"
         // stroke="#FFF"
       />
     </svg>

@@ -46,7 +46,7 @@ const handleSpeedOfCircle = (num: number): { value: number; dd: number } => {
     };
   }
   if (num < 134) {
-    dd = 66 + 15 * 1.12 + 15 * 0.13 + 4 * 0.12 + (16 * 0.2);
+    dd = 66 + 15 * 1.12 + 15 * 0.13 + 4 * 0.12 + 16 * 0.2;
 
     return {
       value: 2.37,
@@ -54,7 +54,7 @@ const handleSpeedOfCircle = (num: number): { value: number; dd: number } => {
     };
   }
   if (num < 132) {
-    dd = 66 + 15 * 1.12 + 15 * 0.13 + 4 * 0.12 + (20 * 0.8) + (4 * 0.8);
+    dd = 66 + 15 * 1.12 + 15 * 0.13 + 4 * 0.12 + 20 * 0.8 + 4 * 0.8;
 
     return {
       value: 2.59,
@@ -62,7 +62,7 @@ const handleSpeedOfCircle = (num: number): { value: number; dd: number } => {
     };
   }
   if (num < 149) {
-    dd = 66 + 15 * 1.12 + 15 * 0.13 + 4 * 0.12 + (20 * 0.8) + (4 * 0.8) + (8 * 0.6);
+    dd = 66 + 15 * 1.12 + 15 * 0.13 + 4 * 0.12 + 20 * 0.8 + 4 * 0.8 + 8 * 0.6;
 
     return {
       value: 2.57,
@@ -70,7 +70,15 @@ const handleSpeedOfCircle = (num: number): { value: number; dd: number } => {
     };
   }
   if (num < 166) {
-    dd = 66 + 15 * 1.12 + 15 * 0.13 + 4 * 0.12 + (20 * 0.8) + (4 * 0.8) + (8 * 0.6) - (17 * 0.2);
+    dd =
+      66 +
+      15 * 1.12 +
+      15 * 0.13 +
+      4 * 0.12 +
+      20 * 0.8 +
+      4 * 0.8 +
+      8 * 0.6 -
+      17 * 0.2;
 
     return {
       value: 2.66,
@@ -78,7 +86,16 @@ const handleSpeedOfCircle = (num: number): { value: number; dd: number } => {
     };
   }
   if (num < 186) {
-    dd = 66 + 15 * 1.12 + 15 * 0.13 + 4 * 0.12 + (20 * 0.8) + (4 * 0.8) + (8 * 0.6) - (17 * 0.2) + (17 * 0.9);
+    dd =
+      66 +
+      15 * 1.12 +
+      15 * 0.13 +
+      4 * 0.12 +
+      20 * 0.8 +
+      4 * 0.8 +
+      8 * 0.6 -
+      17 * 0.2 +
+      17 * 0.9;
 
     return {
       value: 2.67,
@@ -186,41 +203,72 @@ const Line: React.FC<IPropsLine> = ({ backgroundColor = "#056dd3" }) => {
               />
             )}
           </clipPath>
+          <filter
+            id="main-line-shadow"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
+            <feDropShadow
+              dx="-3"
+              dy="2"
+              stdDeviation="6"
+              flood-color="rgba(0, 0, 0, 0.5)"
+            />
+          </filter>
+         {frame > 10 && <filter
+            id="main-line-shadow-circle"
+            x="-200%" y="-50%"
+            width="300%"
+            height="300%"
+          >
+            <feDropShadow
+              dx="-40"
+              dy="40"
+              stdDeviation="20"
+              flood-color="rgba(0, 0, 0, 0.2)"
+            />
+          </filter>}
         </defs>
         <mask id="maskThickPartWWWW">
+          <rect x="0" y="0" width={width} height={SY} fill={"white"} />
           <rect
             x="0"
             y={`${SY - 150}`}
             width={`${width}`}
             height={150}
-            fill="white"
+            fill={"black"}
           />
           <rect
             x={width / 2 - RC - 10}
-            y={height / 2 - progra}
+            y={height / 2 - 100 - progra}
             width={RC + 100}
-            height={320}
-            fill="white"
+            height={430}
+            fill={"black"}
           />
         </mask>
+
         <path
           d={Path}
           stroke-width={8}
           fill="none"
+          filter="url(#main-line-shadow)"
           stroke={"#FFF"}
           clipPath="url(#progress-clipsdkfdksffggf)"
           id="progress-clipsdkfdksffggferrr"
-        />
-        <path
-          d={Path}
-          stroke-width={12}
-          fill="none"
-          stroke={backgroundColor}
-          clipPath="url(#progress-clipsdkfdksffggf)"
           mask="url(#maskThickPartWWWW)"
-          id="progress-clipsdkfdksffggferrr"
         />
-        {<circle cx={x} cy={y} r={30} fill="#FFF" />}
+        {
+          <circle
+            cx={x}
+            cy={y}
+            r={30}
+            fill="#FFF"
+            filter="url(#main-line-shadow-circle)"
+           
+          />
+        }
       </svg>
     </>
   );
