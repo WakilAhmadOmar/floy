@@ -251,7 +251,7 @@ const Line: React.FC<IPropsLine> = ({ backgroundColor = "#056dd3" }) => {
 
         <path
           d={Path}
-          stroke-width={8}
+          strokeWidth={8}
           fill="none"
           filter="url(#main-line-shadow)"
           stroke={"#FFF"}
